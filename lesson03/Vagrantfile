@@ -9,12 +9,12 @@ MACHINES = {
 	:disks => {
 		:sata1 => {
 			:dfile => './sata1.vdi',
-			:size => 250,
+			:size => 8000,
 			:port => 1,
-                        :size_libvirt => '250M',
+                        :size_libvirt => '8G',
                         :dfile_libvirt => 'sata1.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
 		:sata2 => {
 			:dfile => './sata2.vdi',
@@ -23,7 +23,7 @@ MACHINES = {
                         :size_libvirt => '250M',
                         :dfile_libvirt => 'sata2.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
 		:sata3 => {
 			:dfile => './sata3.vdi',
@@ -32,7 +32,7 @@ MACHINES = {
                         :size_libvirt => '250M',
                         :dfile_libvirt => 'sata3.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
 		:sata4 => {
 			:dfile => './sata4.vdi',
@@ -41,7 +41,7 @@ MACHINES = {
                         :size_libvirt => '250M',
                         :dfile_libvirt => 'sata4.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
 		:sata5 => {
 			:dfile => './sata5.vdi',
@@ -50,7 +50,7 @@ MACHINES = {
                         :size_libvirt => '250M',
                         :dfile_libvirt => 'sata5.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
 		:sata6 => {
 			:dfile => './sata6.vdi',
@@ -59,7 +59,7 @@ MACHINES = {
                         :size_libvirt => '250M',
                         :dfile_libvirt => 'sata6.img',
                         :dfile_type_libvirt => 'qcow2',
-                        :bus_libvirt => 'sata'
+                        :bus_libvirt => 'virtio'
 		},
         }
   },
