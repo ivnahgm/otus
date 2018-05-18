@@ -1,0 +1,119 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :otuslinux => {
+        :box_name => "centos/7",
+        :ip_addr => '192.168.11.101',
+        :ip_addr_libvirt => '192.168.15.101',
+	:disks => {
+		:sata1 => {
+			:dfile => './sata1.vdi',
+			:size => 8000,
+			:port => 1,
+                        :size_libvirt => '8G',
+                        :dfile_libvirt => 'sata1.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+		:sata2 => {
+			:dfile => './sata2.vdi',
+			:size => 250,
+			:port => 1,
+                        :size_libvirt => '250M',
+                        :dfile_libvirt => 'sata2.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+		:sata3 => {
+			:dfile => './sata3.vdi',
+			:size => 250,
+			:port => 1,
+                        :size_libvirt => '250M',
+                        :dfile_libvirt => 'sata3.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+		:sata4 => {
+			:dfile => './sata4.vdi',
+			:size => 250,
+			:port => 1,
+                        :size_libvirt => '250M',
+                        :dfile_libvirt => 'sata4.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+		:sata5 => {
+			:dfile => './sata5.vdi',
+			:size => 250,
+			:port => 1,
+                        :size_libvirt => '250M',
+                        :dfile_libvirt => 'sata5.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+		:sata6 => {
+			:dfile => './sata6.vdi',
+			:size => 250,
+			:port => 1,
+                        :size_libvirt => '250M',
+                        :dfile_libvirt => 'sata6.img',
+                        :dfile_type_libvirt => 'qcow2',
+                        :bus_libvirt => 'virtio'
+		},
+        }
+  },
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+      config.vm.define boxname do |box|
+
+          box.vm.box = boxconfig[:box_name]
+          box.vm.host_name = boxname.to_s
+
+          box.vm.provider :virtualbox do |vb, override|
+                  override.vm.network "private_network", ip: boxconfig[:ip_addr]
+            	  vb.customize ["modifyvm", :id, "--memory", "1024"]
+
+		  boxconfig[:disks].each do |dname, dconf|
+			  unless File.exist?(dconf[:dfile])
+				vb.customize ['createhd', '--filename', dconf[:dfile], '--variant', 'Fixed', '--size', dconf[:size]]
+			  end
+			  vb.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', dconf[:port], '--device', 0, '--type', 'hdd', '--medium', dconf[:dfile]]
+
+		  end
+
+                  override.vm.provision "shell", inline: <<-SHELL
+                  SHELL
+          end
+
+          box.vm.provider :libvirt do |lv, override|
+                  override.vm.network "private_network", ip: boxconfig[:ip_addr_libvirt]
+                  lv.cpus = 1
+                  lv.memory = 1024
+
+                  boxconfig[:disks].each do |dname, dconf|
+                      lv.storage :file,
+                          :size => dconf[:size_libvirt],
+                          :type => dconf[:dfile_type_libvirt],
+                          :path => dconf[:dfile_libvirt],
+                          :allow_existing => "true",
+                          :bus => dconf[:bus_libvirt]
+                  end
+
+                  override.vm.provision "shell", inline: <<-SHELL
+                  SHELL
+
+          end
+
+ 	  box.vm.provision "shell", inline: <<-SHELL
+	      mkdir -p ~root/.ssh
+              cp ~vagrant/.ssh/auth* ~root/.ssh
+  	  SHELL
+
+      end
+  end
+end
