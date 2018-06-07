@@ -1,0 +1,10 @@
+[Unit]
+Description=Service for quotes log generation
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/sysconfig/loggenerator
+ExecStart=/usr/sbin/loggenerator.sh $QUOTEFILE $LOGFILE $SLEEPPAUSE
+
+[Install]
+WantedBy=multi-user.target

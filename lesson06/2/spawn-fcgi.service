@@ -1,0 +1,13 @@
+[Unit]
+Description=Spawn FastCGI scripts to be used by web servers
+After=local-fs.target network.target remote-fs.target nss-lookup.target
+Documentation=man:spawn-fcgi(1)
+
+[Service]
+Type=forking
+PIDFile=/var/run/spawn-fcgi.pid
+EnvironmentFile=/etc/sysconfig/spawn-fcgi
+ExecStart=/usr/bin/spawn-fcgi $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

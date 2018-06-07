@@ -1,0 +1,11 @@
+[Unit]
+Description=Custom Log Analizer
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/sysconfig/loganalizer
+ExecStart=/usr/sbin/loganalizer.sh $LOGFILE $KEYWORD $SLEEPPAUSE
+
+[Install]
+WantedBy=multi-user.target
+

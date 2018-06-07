@@ -1,0 +1,3 @@
+QUOTEFILE=/vagrant/1/quotes.txt
+LOGFILE=/var/log/loggenerator.log
+SLEEPPAUSE=10

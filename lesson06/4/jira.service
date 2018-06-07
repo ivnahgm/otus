@@ -1,0 +1,23 @@
+[Unit]
+Description=The Jira Service
+After=network.target
+
+[Service]
+Type=simple
+User=jira
+Group=jira
+EnvironmentFile=/etc/sysconfig/jira
+ExecStart=/opt/atlassian/jira/jre/bin/java \
+          -classpath /opt/atlassian/jira/bin/bootstrap.jar:/opt/atlassian/jira/bin/tomcat-juli.jar \
+          -Dcatalina.base=/opt/atlassian/jira \
+          -Dcatalina.home=/opt/atlassian/jira \
+          org.apache.catalina.startup.Bootstrap start
+ExecStop=/opt/atlassian/jira/jre/bin/java \
+          -classpath /opt/atlassian/jira/bin/bootstrap.jar:/opt/atlassian/jira/bin/tomcat-juli.jar \
+          -Dcatalina.base=/opt/atlassian/jira \
+          -Dcatalina.home=/opt/atlassian/jira \
+          org.apache.catalina.startup.Bootstrap stop
+
+
+[Install]
+WantedBy=multi-user.target

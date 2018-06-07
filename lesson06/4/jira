@@ -1,0 +1,32 @@
+CATALINA_HOME=/opt/atlassian/jira/
+CATALINA_BASE=/opt/atlassian/jira/
+CATALINA_OUT=/opt/atlassian/jira/logs/catalina.out
+CATALINA_TMPDIR=/opt/atlassian/jira/temp
+CATALINA_PID=/opt/atlassian/jira/work/catalina.pid
+
+JAVA_HOME=/opt/atlassian/jira/jre/
+CLASSPATH=$CATALINA_HOME/bin/bootstrap.jar:$CATALINA_BASE/bin/tomcat-juli.jar
+JRE_HOME=
+JPDA_TRANSPORT="dt_socket"
+JPDA_ADDRESS="localhost:8000"
+JPDA_SUSPEND="n"
+JPDA_OPTS="-agentlib:jdwp=transport=$JPDA_TRANSPORT,address=$JPDA_ADDRESS,server=y,suspend=$JPDA_SUSPEND"
+JSSE_OPTS="-Djdk.tls.ephemeralDHKeySize=2048"
+JVM_MINIMUM_MEMORY="384m"
+JVM_MAXIMUM_MEMORY="768m"
+JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
+#DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
+JVM_EXTRA_ARGS="-XX:-OmitStackTraceInFastThrow"
+JIRA_HOME_MINUSD=""
+JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${DISABLE_NOTIFICATIONS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EXTRA_ARGS} ${JIRA_HOME_MINUSD} ${START_JIRA_JAVA_OPTS}"
+JAVA_OPTS="$JAVA_OPTS $JSSE_OPTS -Djava.protocol.handler.pkgs=org.apache.catalina.webresources"
+
+LOGGING_CONFIG="-Djava.util.logging.config.file=$CATALINA_BASE/conf/logging.properties"
+LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+UMASK="0027"
+
+GC_JVM_PARAMETERS=""
+GC_JVM_PARAMETERS="-XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCCause ${GC_JVM_PARAMETERS}"
+GC_JVM_PARAMETERS="-Xloggc:$LOGBASEABS/logs/atlassian-jira-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M ${GC_JVM_PARAMETERS}"
+CATALINA_OPTS="${GC_JVM_PARAMETERS} ${CATALINA_OPTS}"
+CATALINA_OPTS="$JPDA_OPTS $CATALINA_OPTS"
