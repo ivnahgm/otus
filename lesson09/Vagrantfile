@@ -33,7 +33,7 @@ MACHINES = {
   :office1Router => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.255.6', adapter: 2, netmask: "255.255.255.240", virtualbox__intnet: "router-net"},
+                   {ip: '192.168.255.6', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                    {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "dev1-net"},
                    {ip: '192.168.2.65', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "test1-net"},
                    {ip: '192.168.2.129', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "managers1-net"},
@@ -51,7 +51,7 @@ MACHINES = {
   :office2Router => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.240", virtualbox__intnet: "router-net"},
+                   {ip: '192.168.255.10', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
                    {ip: '192.168.1.1', adapter: 3, netmask: "255.255.255.128", virtualbox__intnet: "dev2-net"},
                    {ip: '192.168.1.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "test2-net"},
                    {ip: '192.168.1.193', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "hw2-net"},
