@@ -112,7 +112,7 @@ rsync -Pav -e "ssh -i $PRIVATEKEY" root@10.10.10.10:/vagrant/client1.key ./ && \
 rsync -Pav -e "ssh -i $PRIVATEKEY" root@10.10.10.10:/vagrant/client1.crt ./
 ```
 
-Подключаемся (пароль "somepass", задается в Vagrantfile, естественно не безопасно так делать, это исключительно для стенда):
+Подключаемся:
 
 ```
 sudo openconnect https://10.10.10.10 -u client1 -k client1.key -c client1.crt --cafile ca.crt
