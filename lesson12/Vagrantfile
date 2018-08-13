@@ -55,11 +55,7 @@ Vagrant.configure("2") do |config|
           cp ~vagrant/.ssh/auth* ~root/.ssh
           
           yum -y install quagga
-          systemctl enable zebra.service
-          systemctl start zebra.service
 
-          systemctl enable ospfd.service
-          
           ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
           echo "ONBOOT=yes" > $ifcfg_eth1
           echo "BOOTPROTO=none" >> $ifcfg_eth1
@@ -89,8 +85,11 @@ Vagrant.configure("2") do |config|
           chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
           chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
          
-          systemctl restart zebra.service
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
           systemctl start ospfd.service
+          systemctl restart network
             SHELL
         when "router2"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
@@ -104,8 +103,11 @@ Vagrant.configure("2") do |config|
           chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
           chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
          
-          systemctl restart zebra.service
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
           systemctl start ospfd.service
+          systemctl restart network
             SHELL
         when "router3"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
@@ -119,8 +121,11 @@ Vagrant.configure("2") do |config|
           chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
           chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
          
-          systemctl restart zebra.service
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
           systemctl start ospfd.service
+          systemctl restart network
             SHELL
         when "node3"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
@@ -137,7 +142,6 @@ Vagrant.configure("2") do |config|
           echo "TYPE=Ethernet" >> $ifcfg_eth1
 
           systemctl restart network
-          systemctl disable ospfd.service
             SHELL
         end
 

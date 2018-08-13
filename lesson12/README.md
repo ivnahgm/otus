@@ -219,6 +219,15 @@ OSPF
 
 Поэтому, была введена еще одна нода node3 с адресом 10.3.0.10, находящаяся за router3.
 
+заданы следующие cost:
+
+* 1000 для router1 -> router2
+
+* 2000 для router2 -> router3
+
+* 3000 для router3 -> router1
+
+
 <details>
 <summary>from node3 to 10.1.0.1:</summary>
 
@@ -259,19 +268,13 @@ OSPF
 
 3. Сделать один из линков "дорогим", но что бы при этом роутинг был симметричным
 
-на всех 3 нодах включаем rp_filter:
-
-```
-sysctl net.ipv4.conf.all.rp_filter=1
-```
 
 заданы следующие cost:
 
 * 1000 для router1 -> router2
 
-* 2000 для router2 -> router3
+* 1000 для router2 -> router1
 
-* 3000 для router3 -> router1
 
 <details>
 
@@ -282,10 +285,11 @@ sysctl net.ipv4.conf.all.rp_filter=1
 ```
 [vagrant@router1 ~]$ tracepath 10.2.0.1
  1?: [LOCALHOST]                                         pmtu 1500
- 1:  172.16.12.9                                           1.085ms 
- 1:  172.16.12.9                                           1.144ms 
- 2:  10.2.0.1                                              1.938ms reached
-     Resume: pmtu 1500 hops 2 back 1 
+ 1:  172.16.12.9                                           1.706ms 
+ 1:  172.16.12.9                                           1.307ms 
+ 2:  10.2.0.1                                              2.960ms reached
+     Resume: pmtu 1500 hops 2 back 2 
+ 
 ```
 
 </p>
@@ -299,12 +303,12 @@ sysctl net.ipv4.conf.all.rp_filter=1
 <p>
 
 ```
-[vagrant@router2 ~]$ tracepath 10.3.0.1
+[vagrant@router2 ~]$ tracepath 10.1.0.1
  1?: [LOCALHOST]                                         pmtu 1500
- 1:  172.16.12.1                                           1.207ms 
- 1:  172.16.12.1                                           1.059ms 
- 2:  10.3.0.1                                              1.963ms reached
-     Resume: pmtu 1500 hops 2 back 1 
+ 1:  172.16.12.6                                           1.435ms 
+ 1:  172.16.12.6                                           1.053ms 
+ 2:  10.1.0.1                                              2.839ms reached
+     Resume: pmtu 1500 hops 2 back 2 
 ```
 
 </p>
