@@ -314,22 +314,3 @@ OSPF
 </p>
 
 </details>
-
-<details>
-
-<summary>router3</summary>
-
-<p>
-
-```
-[vagrant@router3 ~]$ tracepath 10.1.0.1
- 1?: [LOCALHOST]                                         pmtu 1500
- 1:  172.16.12.5                                           0.964ms 
- 1:  172.16.12.5                                           1.865ms 
- 2:  10.1.0.1                                              1.450ms reached
-     Resume: pmtu 1500 hops 2 back 1 
-```
-
-</p>
-
-</details>
