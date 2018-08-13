@@ -217,6 +217,45 @@ OSPF
 т.к. любой принимающий сервис будет отдавать ответ с того же сокета с которого принял запрос.
 Во всяком случае, повышение cost/priority никаких результатов не дают.
 
+Поэтому, была введена еще одна нода node3 с адресом 10.3.0.10, находящаяся за router3.
+
+<details>
+<summary>from node3 to 10.1.0.1:</summary>
+
+<p>
+
+```
+[vagrant@node3 ~]$ tracepath 10.1.0.1
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  gateway                                               0.614ms 
+ 1:  gateway                                               0.505ms 
+ 2:  172.16.12.2                                           1.047ms asymm  3 
+ 3:  10.1.0.1                                              0.987ms reached
+     Resume: pmtu 1500 hops 3 back 2 
+```
+
+</p>
+
+</details>
+
+<details>
+<summary>from router2 to 10.3.0.10:</summary>
+
+<p>
+
+```
+[vagrant@router2 ~]$ tracepath 10.3.0.10
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  172.16.12.1                                           0.555ms 
+ 1:  172.16.12.1                                           0.747ms 
+ 2:  172.16.12.6                                           0.804ms asymm  1 
+ 3:  10.3.0.10                                             0.924ms reached
+     Resume: pmtu 1500 hops 3 back 2 
+```
+
+</p>
+
+</details>
 
 3. Сделать один из линков "дорогим", но что бы при этом роутинг был симметричным
 
