@@ -1,0 +1,48 @@
+- hosts: inetRouter
+  user: vagrant
+  become: yes
+  roles:
+  - iptables_port_knocking
+
+  tasks:
+  - name: install packages
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - libselinux-python
+
+  - name: set forwarding
+    sysctl:
+      name: net.ipv4.conf.all.forwarding
+      value: 1
+      reload: yes
+  
+  - name: set static route
+    shell: echo '192.168.0.0/24 via 192.168.255.2 dev eth1' >> /etc/sysconfig/network-scripts/route-eth1
+    notify: "restart network service"
+
+  - name: set password authentication in sshd_config
+    shell: sed -i '66s/^PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    notify: "restart sshd service"
+
+  - name: set masquerade
+    iptables:
+      table: nat
+      chain: POSTROUTING
+      destination: ! 192.168.0.0/16
+      out_interface: eth0
+      jump: MASQUERADE
+
+  handlers:
+  - name: restart network service
+    service:
+      name: network
+      state: restarted
+    listen: "restart network service"
+  
+  - name: restart sshd service
+    service:
+      name: sshd
+      state: restarted
+    listen: "restart sshd service"
