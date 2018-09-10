@@ -1,0 +1,28 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:SSH-INPUT - [0:0]
+:SSH-INPUTTWO - [0:0]
+:TRAFFIC - [0:0]
+-A INPUT -j TRAFFIC 
+-A SSH-INPUT -m recent --set --name SSH1 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A SSH-INPUTTWO -m recent --set --name SSH2 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A TRAFFIC -p icmp -m icmp --icmp-type any -j ACCEPT 
+-A TRAFFIC -m state --state RELATED,ESTABLISHED -j ACCEPT 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 --rsource -j ACCEPT 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH2 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp --dport 9991 -m recent --rcheck --name SSH1 --rsource -j SSH-INPUTTWO 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH1 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp --dport 7777 -m recent --rcheck --name SSH0 --rsource -j SSH-INPUT 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH0 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A TRAFFIC -p tcp -m state --state NEW -m tcp --dport 8881 -m recent --set --name SSH0 --rsource -j REJECT --reject-with icmp-port-unreachable 
+-A TRAFFIC -j REJECT --reject-with icmp-port-unreachable 
+COMMIT
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE 
+COMMIT
