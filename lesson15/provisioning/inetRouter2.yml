@@ -1,0 +1,75 @@
+- hosts: inetRouter2
+  user: vagrant
+  become: yes
+
+  tasks:
+  - name: set forwarding
+    sysctl:
+      name: net.ipv4.conf.all.forwarding
+      value: 1
+      reload: yes
+  
+  - name: set static route
+    shell: echo '192.168.0.0/24 via 192.168.254.2 dev eth1' >> /etc/sysconfig/network-scripts/route-eth1
+    notify: "restart network service"
+  
+  - name: enable and start firewalld
+    systemd:
+      name: firewalld
+      enabled: yes
+      state: started
+    
+  - name: set trusted zone on eth0
+    firewalld:
+      zone: trusted
+      interface: eth0
+      permanent: true
+      state: enabled
+      immediate: true
+
+  - name: set work zone on eth1
+    firewalld:
+      zone: work
+      interface: eth1
+      permanent: true
+      state: enabled
+      immediate: true
+    
+  - name: set public zone on eth2
+    firewalld:
+      zone: public
+      interface: eth2
+      permanent: true
+      state: enabled
+      immediate: true
+
+  - name: set masquerade on eth0
+    firewalld:
+      zone: trusted
+      masquerade: yes
+      permanent: true
+      state: enabled
+      immediate: true
+
+  - name: set masquerade on eth2
+    firewalld:
+      zone: public
+      masquerade: yes
+      permanent: true
+      state: enabled
+      immediate: true
+
+  - name: set forwarding to centralServer
+    firewalld:
+      zone: public
+      rich_rule: rule family=ipv4 forward-port port=8080 protocol=tcp to-port=80 to-addr=192.168.0.2
+      permanent: true
+      state: enabled
+      immediate: true
+
+  handlers:
+  - name: restart network service
+    systemd:
+      name: network
+      state: restarted
+    listen: "restart network service"

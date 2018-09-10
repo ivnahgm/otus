@@ -1,0 +1,9 @@
+- name: save current firewall rules on stop
+  shell: sed -i '19s/^IPTABLES_SAVE_ON_STOP="no"/IPTABLES_SAVE_ON_STOP="yes"/g' /etc/sysconfig/iptables-config
+  when: ansible_os_family == "RedHat"
+  tags: iptables_conf
+
+- name: save current firewall rules on restart
+  shell: sed -i '25s/^IPTABLES_SAVE_ON_RESTART="no"/IPTABLES_SAVE_ON_RESTART="yes"/g' /etc/sysconfig/iptables-config
+  when: ansible_os_family == "RedHat"
+  tags: iptables_conf

@@ -1,0 +1,4 @@
+iptables_port_knocking_ssh_port: 22
+iptables_port_knocking_knock_port_one: 8881
+iptables_port_knocking_knock_port_two: 7777
+iptables_port_knocking_knock_port_three: 9991

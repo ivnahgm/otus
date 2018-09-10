@@ -1,0 +1,4 @@
+- import_playbook: inetRouter.yml
+- import_playbook: inetRouter2.yml
+- import_playbook: centralRouter.yml
+- import_playbook: centralServer.yml

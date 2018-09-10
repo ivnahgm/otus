@@ -1,0 +1,7 @@
+- name: comfigure iptabels service
+  include: iptables_conf.yml
+  tags: iptables_port_knocking
+
+- name: set iptables rules
+  include: iptables_rules.yml
+  tags: iptables_port_knocking

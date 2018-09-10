@@ -1,0 +1,34 @@
+- name: set iptables rules for knocking port
+  shell: |
+    iptables -N TRAFFIC 
+
+    iptables -N SSH-INPUT
+
+    iptables -N SSH-INPUTTWO 
+
+    iptables -A INPUT -j TRAFFIC 
+
+    iptables -A SSH-INPUT -m recent --set --name SSH1 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A SSH-INPUTTWO -m recent --set --name SSH2 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A TRAFFIC -p icmp -m icmp --icmp-type any -j ACCEPT 
+
+    iptables -A TRAFFIC -m state --state RELATED,ESTABLISHED -j ACCEPT 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp --dport {{ iptables_port_knocking_ssh_port }} -m recent --rcheck --seconds 30 --name SSH2 --rsource -j ACCEPT 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH2 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp --dport {{ iptables_port_knocking_knock_port_three }} -m recent --rcheck --name SSH1 --rsource -j SSH-INPUTTWO 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH1 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp --dport {{ iptables_port_knocking_knock_port_two }} -m recent --rcheck --name SSH0 --rsource -j SSH-INPUT 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp -m recent --remove --name SSH0 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A TRAFFIC -p tcp -m state --state NEW -m tcp --dport {{ iptables_port_knocking_knock_port_one }} -m recent --set --name SSH0 --rsource -j REJECT --reject-with icmp-port-unreachable 
+
+    iptables -A TRAFFIC -j REJECT --reject-with icmp-port-unreachable 
+  tags: iptables_rules

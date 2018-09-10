@@ -1,0 +1,36 @@
+- hosts: centralRouter
+  user: vagrant
+  become: yes
+
+  tasks:
+  - name: install packages
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - nmap
+
+  - name: set forwarding
+    sysctl:
+      name: net.ipv4.conf.all.forwarding
+      value: 1
+      reload: yes
+  
+  - name: remove default route from eth0
+    shell: echo 'DEFROUTE=no' >> /etc/sysconfig/network-scripts/ifcfg-eth0
+    notify: "restart network service"
+
+  - name: add default gateway on eth1
+    shell: echo 'GATEWAY=192.168.255.1' >> /etc/sysconfig/network-scripts/ifcfg-eth1
+    notify: "restart network service"
+  
+  - name: set static route
+    shell: echo '10.10.0.0/24 via 192.168.254.1 dev eth3' >> /etc/sysconfig/network-scripts/route-eth3
+    notify: "restart network service"
+
+  handlers:
+  - name: restart network service
+    systemd:
+      name: network
+      state: restarted
+    listen: "restart network service"
