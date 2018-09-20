@@ -1,0 +1,40 @@
+---
+- name: add pam_script in /etc/pam.d/login
+  pamd:
+    name: login
+    type: account
+    control: required
+    module_path: pam_nologin.so
+    new_type: account
+    new_control: required
+    new_module_path: pam_script.so
+    state: after
+  tags: set_pam
+
+- name: add pam_script in /etc/pam.d/sshd
+  pamd:
+    name: sshd
+    type: account
+    control: required
+    module_path: pam_nologin.so
+    new_type: account
+    new_control: required
+    new_module_path: pam_script.so
+    state: after
+  tags: set_pam
+
+- name: copy pam_script_acct file
+  template:
+    src: etc/pam-script.d/pam_script_acct.j2
+    dest: /etc/pam-script.d/pam_script_acct
+    owner: root
+    group: root
+    mode: 0755
+  tags: set_pam
+
+- name: make symlink for pam_script_acct
+  file:
+    src: /etc/pam-script.d/pam_script_acct
+    dest: /etc/pam_script_acct
+    state: link
+  tags: set_pam

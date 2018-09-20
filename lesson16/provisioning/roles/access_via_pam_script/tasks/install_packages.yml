@@ -1,0 +1,14 @@
+---
+- name: install epel
+  yum:
+    name: epel-release
+  tags: install_packages
+
+- name: install packages
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - pam_script
+    - expect
+  tags: install_packages

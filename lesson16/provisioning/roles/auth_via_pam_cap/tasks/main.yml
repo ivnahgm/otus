@@ -1,0 +1,4 @@
+---
+- name: set pam_cap
+  include: set_pam_cap.yml
+  tags: auth_via_pam_cap

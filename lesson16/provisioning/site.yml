@@ -1,0 +1,7 @@
+---
+- hosts: pamotus
+  user: vagrant
+  become: true
+  roles:
+    - access_via_pam_script
+    - auth_via_pam_cap

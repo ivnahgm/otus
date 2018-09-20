@@ -1,0 +1,16 @@
+---
+- name: install packages
+  include: install_packages.yml
+  tags: access_via_pam_script
+
+- name: create users and groups
+  include: set_users.yml
+  tags: access_via_pam_script
+
+- name: set pam-script
+  include: set_pam.yml
+  tags: access_via_pam_script
+
+- name: set ssh_config
+  include: set_sshd.yml
+  tags: access_via_pam_script

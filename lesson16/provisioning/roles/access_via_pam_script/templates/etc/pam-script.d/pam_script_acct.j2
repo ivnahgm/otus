@@ -1,0 +1,16 @@
+#!/bin/bash
+
+WANTED_GROUP={{ access_via_pam_script_always_allow_group }}
+CELEBRATIONS={{ access_via_pam_script_celebrations }}
+
+if [[ $(groups $PAM_USER | grep -w $WANTED_GROUP) ]]; then
+    exit 0
+elif [[ $(echo $CELEBRATIONS | grep -w $(date +%d%m)) ]]; then
+    echo "Access denied on celebration day"
+    exit 1
+elif [[ $(date +%A) =~ (Sunday|Saturday) ]]; then
+    echo "Access denied on weekend"
+    exit 1
+else
+    exit 0
+fi

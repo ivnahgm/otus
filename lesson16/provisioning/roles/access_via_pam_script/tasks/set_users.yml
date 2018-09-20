@@ -1,0 +1,33 @@
+---
+- name: create always allow group
+  group:
+    name: "{{ access_via_pam_script_always_allow_group }}"
+    state: present
+  tags: set_users
+
+- name: add "{{ access_via_pam_script_always_allow_user }}" to always allow group
+  user:
+    append: yes
+    groups: "{{ access_via_pam_script_always_allow_group }}"
+    name: "{{ access_via_pam_script_always_allow_user }}"
+  tags: set_users
+
+- name: create simple group
+  group:
+    name: "{{ access_via_pam_script_simple_group }}"
+    state: present
+  tags: set_users
+
+- name: add simple user
+  user:
+    name: "{{ access_via_pam_script_simple_user }}"
+    group: "{{ access_via_pam_script_simple_group }}"
+  tags: set_users
+
+- name: set password for simple user
+  shell: mkpasswd -s 0 -C 0 -l 4 {{ access_via_pam_script_simple_user }}
+  register: otuspass
+  tags: set_users
+
+- debug: msg="Password for {{ access_via_pam_script_simple_user }} is {{ otuspass.stdout }}"
+  tags: set_users

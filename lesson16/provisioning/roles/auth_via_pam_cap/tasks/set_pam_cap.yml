@@ -1,0 +1,21 @@
+---
+- name: add pam_cap in /etc/pam.d/login
+  pamd:
+    name: login
+    type: auth
+    control: substack
+    module_path: system-auth
+    new_type: auth
+    new_control: required
+    new_module_path: pam_cap.so
+    state: before
+  tags: set_pam_cap
+
+- name: create /etc/security/capability.conf
+  template:
+    src: etc/security/capability.conf.j2
+    dest: /etc/security/capability.conf
+    owner: root
+    group: root
+    mode: 0755
+  tags: set_pam_cap

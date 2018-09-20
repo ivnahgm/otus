@@ -1,0 +1,7 @@
+---
+- name: configure sshd_config to allow access for users with password
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication yes'
+  notify: "restart sshd service"
