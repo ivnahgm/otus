@@ -1,0 +1,22 @@
+---
+- name: create /etc/sysconfig/network-scripts/route-*
+  file:
+    path: /etc/sysconfig/network-scripts/route-{{ item.interface }}
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ otus_netlab_router_routes }}"
+  when: otus_netlab_router_routes is defined
+  tags: addroutes
+  
+- name: add routes
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/route-{{ item.interface }}
+    line: "{{ item.net }} via {{ item.gateway }} dev {{ item.interface }}"
+  with_items:
+    - "{{ otus_netlab_router_routes }}"
+  when: otus_netlab_router_routes is defined
+  notify: "restart network service"
+  tags: addroutes

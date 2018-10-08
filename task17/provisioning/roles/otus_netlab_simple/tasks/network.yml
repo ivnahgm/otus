@@ -1,0 +1,14 @@
+---
+- name: remove default route from eth0
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    line: 'DEFROUTE=no'
+  notify: "restart network service"
+  tags: network
+
+- name: add default gateway on {{ otus_netlab_simple_default_interface }}
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ otus_netlab_simple_default_interface }}
+    line: 'GATEWAY={{ otus_netlab_simple_default_gw }}'
+  notify: "restart network service"
+  tags: network

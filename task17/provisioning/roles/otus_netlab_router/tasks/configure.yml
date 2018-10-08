@@ -1,0 +1,14 @@
+---
+- name: install packages
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - libselinux-python
+
+- name: set permanent net.ipv4.conf.all.forwarding
+  sysctl:
+    name: net.ipv4.conf.all.forwarding
+    value: 1
+    reload: yes
+  tags: configure

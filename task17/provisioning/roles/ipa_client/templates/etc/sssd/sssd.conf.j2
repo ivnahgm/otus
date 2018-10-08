@@ -1,0 +1,32 @@
+#/etc/sssd/sssd.conf
+
+[domain/{{ ipa_client_server_domain }}]
+
+cache_credentials = True
+krb5_store_password_if_offline = True
+ipa_domain = {{ ipa_client_server_domain }}
+id_provider = ipa
+auth_provider = ipa
+access_provider = ipa
+ipa_hostname = {{ ansible_hostname }}.{{ ipa_client_server_domain }}
+chpass_provider = ipa
+ipa_server = _srv_, {{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }}
+ldap_tls_cacert = /etc/ipa/ca.crt
+[sssd]
+services = nss, sudo, pam, ssh
+
+domains = {{ ipa_client_server_domain }}
+[nss]
+homedir_substring = /home
+
+[pam]
+
+[sudo]
+
+[autofs]
+
+[ssh]
+
+[pac]
+
+[ifp]

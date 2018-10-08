@@ -1,0 +1,8 @@
+---
+ipa_client_server_admin: admin
+ipa_client_server_admin_password: somepassword
+ipa_client_server_basedn: "dc=task17,dc=ru"
+ipa_client_server_domain: task17.ru
+ipa_client_server_hostname: centralserver
+ipa_client_server_ip: 192.168.0.2
+ipa_client_server_realm: TASK17.RU

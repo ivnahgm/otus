@@ -1,0 +1,12 @@
+---
+- name: download ca.crt
+  shell: curl https://{{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }}/ipa/config/ca.crt -k --output /etc/ipa/ca.crt
+  tags: krb_configure
+
+- name: run kinit
+  shell: echo "{{ ipa_client_server_admin_password }}" | kinit -p "{{ ipa_client_server_admin }}"@"{{ ipa_client_server_realm }}"
+  tags: krb_configure
+
+- name: generate keytab
+  shell: ipa-getkeytab -s {{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }} -p host/{{ ansible_hostname }}.{{ ipa_client_server_domain }}@{{ ipa_client_server_realm }} -k /etc/krb5.keytab
+  tags: krb_configure

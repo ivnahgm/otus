@@ -1,0 +1,4 @@
+---
+- name: administrate ipa users
+  include: createusers.yml
+  tags: ipa_user_manage

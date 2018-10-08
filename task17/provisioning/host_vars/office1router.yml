@@ -1,0 +1,5 @@
+---
+ipa_client_ip: 192.168.255.6
+
+otus_netlab_simple_default_gw: 192.168.255.5
+otus_netlab_simple_default_interface: eth1

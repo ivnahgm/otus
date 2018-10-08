@@ -1,0 +1,4 @@
+---
+- name: set network
+  include: network.yml
+  tags: otus_netlab_simple

@@ -1,0 +1,5 @@
+#/etc/sysconfig/network
+
+HOSTNAME={{ ansible_hostname }}.{{ ipa_client_server_domain }}
+NETWORKING=yes
+NISDOMAIN={{ ipa_client_server_domain }}

@@ -1,0 +1,22 @@
+---
+ipa_client_ip: 192.168.255.1
+
+otus_netlab_gateway_out_interface: eth0
+otus_netlab_gateway_internal_net: 192.168.0.0/16
+
+otus_netlab_router_routes:
+  - interface: eth1
+    net: 192.168.0.0/24
+    gateway: 192.168.255.2
+  - interface: eth1
+    net: 192.168.1.0/24
+    gateway: 192.168.255.2
+  - interface: eth1
+    net: 192.168.2.0/24
+    gateway: 192.168.255.2
+  - interface: eth1
+    net: 192.168.255.4/30
+    gateway: 192.168.255.2
+  - interface: eth1
+    net: 192.168.255.8/30
+    gateway: 192.168.255.2

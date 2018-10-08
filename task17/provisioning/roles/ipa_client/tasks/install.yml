@@ -1,0 +1,8 @@
+---
+- name: install packages
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - ipa-client
+  tags: install

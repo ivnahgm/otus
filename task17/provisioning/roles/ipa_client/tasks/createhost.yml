@@ -1,0 +1,11 @@
+---
+- name: create host
+  ipa_host:
+    name: "{{ ansible_hostname }}.{{ ipa_client_server_domain }}"
+    ip_address: "{{ ipa_client_ip }}"
+    state: present
+    ipa_host: "{{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }}"
+    ipa_user: "{{ ipa_client_server_admin }}"
+    ipa_pass: "{{ ipa_client_server_admin_password }}"
+    validate_certs: False
+  tags: createhost

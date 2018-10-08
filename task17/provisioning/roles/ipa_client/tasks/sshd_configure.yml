@@ -1,0 +1,9 @@
+---
+- name: add auth with keys over ipa for ssh
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
+      AuthorizedKeysCommandUser nobody
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version >= '7'
+  tags: sshd_configure
