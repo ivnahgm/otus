@@ -1,0 +1,154 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+  :router1 => {
+        :box_name => "centos/7",
+        :net => [
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "area0-net"},
+                ]
+  },
+  :router2 => {
+        :box_name => "centos/7",
+        :net => [
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "area0-net"},
+                ]
+  },
+  
+  :router3 => {
+        :box_name => "centos/7",
+        :net => [
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "area0-net"},
+                   {adapter: 3, auto_config: false, virtualbox__intnet: "area3-net"},
+                ]
+  },
+  
+  :node3 => {
+        :box_name => "centos/7",
+        :net => [
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "area3-net"},
+                ]
+  },
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+        box.vm.host_name = boxname.to_s
+
+        box.vm.provider :virtualbox do |vb|
+          vb.customize ["modifyvm", :id, "--memory", "200"]
+        end
+
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+
+        box.vm.provision "shell", run: "always", inline: <<-SHELL
+          mkdir -p ~root/.ssh
+          cp ~vagrant/.ssh/auth* ~root/.ssh
+          
+          yum -y install quagga
+
+          ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
+          echo "ONBOOT=yes" > $ifcfg_eth1
+          echo "BOOTPROTO=none" >> $ifcfg_eth1
+          echo "DEVICE=eth1" >> $ifcfg_eth1
+          echo "NM_CONTOLLED=no" >> $ifcfg_eth1
+
+          VLANS=(10 30)
+          for i in ${VLANS[@]}; do
+          echo "ONBOOT=yes" > ${ifcfg_eth1}.$i
+          echo "VLAN=yes" >> ${ifcfg_eth1}.$i
+          echo "BOOTPROTO=static" >> ${ifcfg_eth1}.$i
+          echo "TYPE=Ethernet" >> ${ifcfg_eth1}.$i
+          echo "NM_CONTROLLED=no" >> ${ifcfg_eth1}.$i
+          done
+
+        SHELL
+        
+        case boxname.to_s
+        when "router1"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+          ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
+          echo "DEVICE=eth1.10" >> ${ifcfg_eth1}.10
+          echo "DEVICE=eth1.30" >> ${ifcfg_eth1}.30
+
+          cp /vagrant/1/router1/zebra.conf /etc/quagga/
+          cp /vagrant/1/router1/ospfd.conf /etc/quagga/
+          chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+          chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+         
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
+          systemctl start ospfd.service
+          systemctl restart network
+            SHELL
+        when "router2"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+          ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
+          mv ${ifcfg_eth1}.30 ${ifcfg_eth1}.20
+          echo "DEVICE=eth1.10" >> ${ifcfg_eth1}.10
+          echo "DEVICE=eth1.20" >> ${ifcfg_eth1}.20
+
+          cp /vagrant/1/router2/zebra.conf /etc/quagga/
+          cp /vagrant/1/router2/ospfd.conf /etc/quagga/
+          chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+          chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+         
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
+          systemctl start ospfd.service
+          systemctl restart network
+            SHELL
+        when "router3"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+          ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
+          mv ${ifcfg_eth1}.10 ${ifcfg_eth1}.20
+          echo "DEVICE=eth1.20" >> ${ifcfg_eth1}.20
+          echo "DEVICE=eth1.30" >> ${ifcfg_eth1}.30
+
+          cp /vagrant/1/router3/zebra.conf /etc/quagga/
+          cp /vagrant/1/router3/ospfd.conf /etc/quagga/
+          chmod 600 /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+          chown quagga:quagga /etc/quagga/ospfd.conf /etc/quagga/zebra.conf
+         
+          systemctl enable zebra.service
+          systemctl enable ospfd.service
+          systemctl start zebra.service
+          systemctl start ospfd.service
+          systemctl restart network
+            SHELL
+        when "node3"
+          box.vm.provision "shell", run: "always", inline: <<-SHELL
+          ifcfg_eth1=/etc/sysconfig/network-scripts/ifcfg-eth1
+          rm -f ${ifcfg_eth1}.10 ${ifcfg_eth1}.30
+
+          echo "ONBOOT=yes" > $ifcfg_eth1
+          echo "BOOTPROTO=none" >> $ifcfg_eth1
+          echo "DEVICE=eth1" >> $ifcfg_eth1
+          echo "NM_CONTOLLED=no" >> $ifcfg_eth1
+          echo "IPADDR=10.3.0.10" >> $ifcfg_eth1
+          echo "NETMASK=255.255.0.0" >> $ifcfg_eth1
+          echo "GATEWAY=10.3.0.1" >> $ifcfg_eth1
+          echo "TYPE=Ethernet" >> $ifcfg_eth1
+
+          systemctl restart network
+            SHELL
+        end
+
+      end
+
+  end
+  
+  
+end
+
