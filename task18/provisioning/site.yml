@@ -1,0 +1,6 @@
+---
+- hosts: simpleserver
+  user: vagrant
+  become: yes
+  roles:
+  - centos_server_simple

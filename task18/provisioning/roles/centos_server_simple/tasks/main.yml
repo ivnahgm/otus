@@ -1,0 +1,16 @@
+---
+- name: install packages
+  include: install_packages.yml
+  tags: centos_server_simple
+
+- name: install atop
+  include: atop.yml
+  tags: centos_server_simple
+
+- name: sysctl settings
+  include: sysctl.yml
+  tags: centos_server_simple
+
+- name: disable zeroconf
+  include: disable_zeroconf.yml
+  tags: centos_server_simple

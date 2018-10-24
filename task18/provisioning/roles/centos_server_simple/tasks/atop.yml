@@ -1,0 +1,19 @@
+---
+- name: install epel package
+  yum:
+    name: epel-release
+    state: present
+  tags: atop
+
+- name: install atop package
+  yum:
+    name: atop
+    state: present
+  tags: atop
+
+- name: start atop service
+  service:
+    name: atop
+    enabled: yes
+    state: started
+  tags: atop

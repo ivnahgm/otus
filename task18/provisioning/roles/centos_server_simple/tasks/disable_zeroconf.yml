@@ -1,0 +1,4 @@
+---
+- name: disable zeroconf
+  shell: echo NOZEROCONF=yes >> /etc/sysconfig/network
+  tags: disable_zeroconf

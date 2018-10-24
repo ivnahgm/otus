@@ -1,0 +1,9 @@
+---
+- name: sysctl settings
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  with_items: "{{ centos_server_simple_sysctl_params }}"
+  tags: sysctl

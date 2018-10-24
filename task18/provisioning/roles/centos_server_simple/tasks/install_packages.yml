@@ -1,0 +1,31 @@
+---
+- name: install epel
+  yum:
+    name: epel-release
+    state: installed
+  tags: install_packages
+
+- name: install tools
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - lsof
+    - nmap
+    - policycoreutils-python
+    - setools-console
+    - sysstat
+    - tcpdump
+  tags: install_packages
+
+- name: uninstall cronie-anacron
+  yum:
+    name: cronie-anacron
+    state: absent
+  tags: install_packages
+
+- name: install cronie-noanacron
+  yum:
+    name: cronie-noanacron
+    state: installed
+  tags: install_packages
