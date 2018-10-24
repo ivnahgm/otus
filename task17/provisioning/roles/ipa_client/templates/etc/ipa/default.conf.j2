@@ -1,0 +1,9 @@
+#/etc/ipa/default.conf
+
+[global]
+basedn = {{ ipa_client_server_basedn }}
+realm = {{ ipa_client_server_realm }}
+domain = {{ ipa_client_server_domain }}
+server = {{ ipa_client_server_hostname }}{{ ipa_client_server_domain }}
+xmlrpc_uri = https://{{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }}/ipa/xml
+enable_ra = True

@@ -1,0 +1,39 @@
+---
+- name: add pam_sssd
+  pamd:
+    name: system-auth
+    type: auth
+    control: required
+    module_path: pam_deny.so
+    new_type: auth
+    new_control: sufficient
+    new_module_path: pam_sss.so
+    module_arguments: forward_pass
+    state: before
+  tags: pam_configure
+
+- name: add mkhomedir in pam
+  pamd:
+    name: system-auth
+    type: session
+    control: required
+    module_path: pam_limits.so
+    new_type: session
+    new_control: optional
+    new_module_path: pam_oddjob_mkhomedir.so
+    module_arguments: 'umask=0077'
+    state: after
+  tags: pam_configurepam
+
+- name: add mkhomedir in pam for ssh
+  pamd:
+    name: sshd
+    type: session
+    control: required
+    module_path: pam_namespace.so
+    new_type: session
+    new_control: optional
+    new_module_path: pam_oddjob_mkhomedir.so
+    module_arguments: 'umask=0077'
+    state: after
+  tags: pam_configurepam

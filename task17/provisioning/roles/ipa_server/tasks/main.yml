@@ -1,0 +1,16 @@
+---
+- name: prepare server
+  include: prepare.yml
+  tags: ipa_server
+
+- meta: flush_handlers
+  tags: ipa_server
+
+
+- name: install packages
+  include: installpackages.yml
+  tags: ipa_server
+  
+- name: install ipa server
+  include: install.yml
+  tags: ipa_server

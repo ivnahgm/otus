@@ -1,0 +1,16 @@
+---
+- name: create users
+  ipa_user:
+    name: "{{ item.name }}"
+    state: present
+    givenname: "{{ item.givenname }}"
+    sn: "{{ item.sn }}"
+    loginshell: /bin/bash
+    sshpubkey:
+    - "{{ item.sshpubkey }}"
+    ipa_host: "{{ ipa_user_manage_ipa_hostname }}"
+    ipa_user: "{{ ipa_user_manage_ipa_admin_name }}"
+    ipa_pass: "{{ ipa_user_manage_ipa_admin_password }}"
+  with_items:
+    - "{{ ipa_user_manage_users }}"
+  tags: createusers

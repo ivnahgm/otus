@@ -1,0 +1,43 @@
+---
+- hosts: centralserver
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_server
+  - ipa_user_manage
+
+- hosts: centralrouter
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client
+
+- hosts: inetrouter
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client
+
+- hosts: office1router
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client
+
+- hosts: office1server
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client
+
+- hosts: office2router
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client
+
+- hosts: office2server
+  user: vagrant
+  become: yes
+  roles:
+  - ipa_client

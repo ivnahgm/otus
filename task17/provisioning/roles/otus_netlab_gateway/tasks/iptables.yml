@@ -1,0 +1,9 @@
+---
+- name: set masquerade
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    destination: "!{{ otus_netlab_gateway_internal_net }}"
+    out_interface: "{{ otus_netlab_gateway_out_interface }}"
+    jump: MASQUERADE
+  tags: iptables

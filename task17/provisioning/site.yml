@@ -1,0 +1,46 @@
+---
+- hosts: centralserver
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_simple
+
+- hosts: centralrouter
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_router
+  - otus_netlab_simple
+
+- hosts: inetrouter
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_gateway
+  - otus_netlab_router
+
+- hosts: office1router
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_router
+  - otus_netlab_simple
+
+- hosts: office1server
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_simple
+
+- hosts: office2router
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_router
+  - otus_netlab_simple
+
+- hosts: office2server
+  user: vagrant
+  become: yes
+  roles:
+  - otus_netlab_simple

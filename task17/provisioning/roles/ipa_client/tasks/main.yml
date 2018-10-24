@@ -1,0 +1,35 @@
+---
+- name: prepare system
+  include: prepare.yml
+  tags: ipa_client
+
+- meta: flush_handlers
+  tags: ipa_client
+
+- name: install
+  include: install.yml
+  tags: ipa_client
+
+- name: copy files
+  include: copyfiles.yml
+  tags: ipa_client
+
+- name: create host on ipa server
+  include: createhost.yml
+  tags: ipa_client
+
+- name: configure pam
+  include: pam_configure.yml
+  tags: ipa_client
+
+- name: configure krb
+  include: krb_configure.yml
+  tags: ipa_client
+
+- name: configure ssh
+  include: sshd_configure.yml
+  tags: ipa_client
+
+- name: enable and start services
+  include: startservices.yml
+  tags: ipa_client

@@ -1,0 +1,8 @@
+---
+- name: configure system
+  include: configure.yml
+  tags: otus_netlab_router
+
+- name: add routes
+  include: addroutes.yml
+  tags: otus_netlab_router

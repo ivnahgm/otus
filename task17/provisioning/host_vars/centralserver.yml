@@ -1,0 +1,24 @@
+---
+ipa_server_admin_password: somepassword
+ipa_server_domain: task17.ru
+ipa_server_ds_password: somepassword
+ipa_server_hostname: "{{ ansible_hostname }}"
+ipa_server_ip: 192.168.0.2
+ipa_server_realm: TASK17.RU
+ipa_server_reverse_zone: 168.192.in-addr.arpa.
+
+otus_netlab_simple_default_gw: 192.168.0.1
+otus_netlab_simple_default_interface: eth1
+
+ipa_user_manage_ipa_admin_name: admin
+ipa_user_manage_ipa_admin_password: somepassword
+ipa_user_manage_ipa_hostname: centralserver.task17.ru
+ipa_user_manage_users:
+  - name: joe
+    givenname: Joe
+    sn: First
+    sshpubkey: "AAAAB3NzaC1yc2EAAAADAQABAAABAQC++1orxZujedoaSUW56xTed2LNZzKAJWBrAjdQF2IPVcmOSzkJj+xbbri+Nb6aG2hUaHgUzE2S/luZnNoCRDlLGDDHn2cb9vqdFl33WjoXJH6YmDVzQCWzOCKXhJWRytiOmv6wjFl7GWOJu6E92hjALtRlubA0uWa0yyod/h/mhkchNYAxZkxBxVysrLbMiz9UzBWcj2Ee0zT9sV9g5R/Lea2MXr1sZ5HL0+Y8Gq29URJiKiw6SCYF/ldMBff8JjNKC7PH23jzxbfTYluW6pmzEYtYiZhCa8cvZ731CA8PWNZ7N5Dk4xFlZW+6RymCs6l9ge0dVBYpcIlvXHxSKoqf"
+  - name: bob
+    givenname: Bob
+    sn: Second
+    sshpubkey: "AAAAB3NzaC1yc2EAAAADAQABAAABAQCfER+I6WnK0RFC/CbWeJlBaLiSuYOg/Y6jzoEA3toahP0VKH8RtHHLPVgm/8vzctVZIK7SB9JSoDzUsFUZLQezbZ64SLXkc0dp6aUHiBdGbbyD/HoMfyYf42MWg69rAS18Tl6WvzUrsobAoPVtKyP1NJtfI1DAq0zQVGkM9uWJzSnKKHB8DSbGVJ9hDpWVHtgwXhMdx/dnN9LBUhCKKcbjSzvmyMOGHqnxytGHayU/k+SjgDkCCRc+PxGl9DRtcft5Bi+Mp+Z9plVWBxIXFnGbRC0LkfWXgv4L1S2pEwgsh9cI4mtwn7TWJACSMlM9jVey/c+SEIl9LQMmPBW9rDzf"

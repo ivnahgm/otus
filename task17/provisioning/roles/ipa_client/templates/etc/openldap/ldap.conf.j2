@@ -1,0 +1,5 @@
+#/etc/openldap/ldap.conf
+
+URI ldaps://{{ ipa_client_server_hostname }}.{{ ipa_client_server_domain }}
+BASE {{ ipa_client_server_basedn }}
+TLS_CACERT /etc/ipa/ca.crt

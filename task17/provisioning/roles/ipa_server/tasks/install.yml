@@ -1,0 +1,15 @@
+---
+- name: install ipa-server
+  command: >
+    ipa-server-install -U
+    --admin-password={{ ipa_server_admin_password }}
+    --domain={{ ipa_server_domain }}
+    --ds-password={{ ipa_server_ds_password }}
+    --hostname={{ ipa_server_hostname }}.{{ ipa_server_domain }}
+    --ip-address={{ ipa_server_ip }}
+    --mkhomedir
+    --no-host-dns
+    --no-forwarders
+    --realm={{ ipa_server_realm }}
+    --reverse-zone={{ ipa_server_reverse_zone }}
+    --setup-dns

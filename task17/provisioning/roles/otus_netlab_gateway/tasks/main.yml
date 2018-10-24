@@ -1,0 +1,4 @@
+---
+- name: add iptables rules
+  include: iptables.yml
+  tags: otus_netlab_gateway

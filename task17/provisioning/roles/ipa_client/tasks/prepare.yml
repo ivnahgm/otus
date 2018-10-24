@@ -1,0 +1,36 @@
+---
+- name: add dns server
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth1
+    line: 'DNS1={{ ipa_client_server_ip }}'
+  notify: "restart network service"
+  tags: prepare
+
+- name: allow update dns server with network manager for CentOS 7
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth1
+    regexp: '^PEERDNS'
+    line: 'PEERDNS=yes'
+  notify: "restart network service"
+  tags: prepare
+
+- name: add domain search for CentOS 6
+  lineinfile:
+    path: /etc/resolv.conf
+    insertbefore: '^nameserver'
+    line: 'search {{ ipa_client_server_domain }}'
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+  tags: prepare
+
+- name: add dns server for CentOS 6
+  lineinfile:
+    path: /etc/resolv.conf
+    insertbefore: '^nameserver'
+    line: 'nameserver {{ ipa_client_server_ip }}'
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+  tags: prepare
+
+- name: set host fqdn
+  hostname:
+    name: "{{ ansible_hostname }}.{{ ipa_client_server_domain }}"
+  tags: prepare
